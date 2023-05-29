@@ -55,6 +55,8 @@ void loop() {
     move("FWD", speedDiferential);
     Serial.println(speedDiferential);
   }
+  Serial.print("controlSignal");
+  Serial.println(controlSignal);
 }
 
 void move(String direction,int motorPower){
