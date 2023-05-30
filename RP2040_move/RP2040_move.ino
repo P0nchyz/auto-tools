@@ -15,9 +15,9 @@ bool sens6;
 bool sens7;
 
 const int motorBaseSpeed = 128;
-const int Kp = 0.3;
-int controlSignal = 0;
-int speedDiferential = 0;
+const float Kp = 0.3;
+float controlSignal = 0;
+float speedDiferential = 0;
 
 void setup() {
   Serial.begin(115200);
@@ -29,13 +29,13 @@ void setup() {
   pinMode(BIN2, OUTPUT);
   pinMode(STBY, OUTPUT);
 
-  pinMode(21, INPUT);
-  pinMode(18, INPUT);
-  pinMode(19, INPUT);
-  pinMode(2, INPUT);
-  pinMode(3, INPUT);
-  pinMode(10, INPUT);
-  pinMode(15, INPUT);
+  pinMode(21, INPUT_PULLUP);
+  pinMode(18, INPUT_PULLUP);
+  pinMode(19, INPUT_PULLUP);
+  pinMode(2, INPUT_PULLUP);
+  pinMode(3, INPUT_PULLUP);
+  pinMode(10, INPUT_PULLUP);
+  pinMode(15, INPUT_PULLUP);
 }
 
 void loop() {
@@ -53,10 +53,7 @@ void loop() {
   speedDiferential = controlSignal * motorBaseSpeed;
   if(sens4 || sens3 || sens5){
     move("FWD", speedDiferential);
-    Serial.println(speedDiferential);
   }
-  Serial.print("controlSignal");
-  Serial.println(controlSignal);
 }
 
 void move(String direction,int motorPower){
@@ -72,6 +69,7 @@ void move(String direction,int motorPower){
 
     analogWrite(PWMA, motorBaseSpeed + motorPower);
     analogWrite(PWMB, motorBaseSpeed - motorPower);
+    Serial.println(motorBaseSpeed + motorPower);
   }
   else if (direction == "RGT") {
     Serial.println("Moving right...");
