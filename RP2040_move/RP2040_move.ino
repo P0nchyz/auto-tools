@@ -1,3 +1,4 @@
+
 #define PWMA 29
 #define PWMB 28
 #define AIN1 27
@@ -48,7 +49,8 @@ void setup() {
 
 void loop() {
   senAsigner();
-  sensorPrinter();
+  //sensorPrinter();
+  senMover();
 }
 
 void move(String direction,int motorPower){
@@ -64,7 +66,6 @@ void move(String direction,int motorPower){
 
     analogWrite(PWMA, motorBaseSpeed + motorPower);
     analogWrite(PWMB, motorBaseSpeed - motorPower);
-    Serial.println(motorBaseSpeed + motorPower);
   }
   else if (direction == "RGT") {
     Serial.println("Moving right...");
@@ -106,7 +107,7 @@ void move(String direction,int motorPower){
     analogWrite(PWMB, 255);
   }
   else if(direction == "STP"){
-    Serial.println("Stoped...");
+    //Serial.println("Stoped...");
     digitalWrite(STBY, LOW);
 
     digitalWrite(AIN1, LOW);
@@ -157,5 +158,38 @@ bool senBool(bool s1,bool s2,bool s3,bool s4,bool s5){
   }
   else{
     return false;
+  }
+}
+
+void senMover() {
+  if(senBool(0,0,1,0,0)){
+    controlSignal = 0 * Kp;
+  }
+  if(senBool(0,0,0,1,0)){
+    controlSignal = 1 * Kp;
+  }
+  if(senBool(0,1,0,0,0)){
+    controlSignal = -1 * Kp;
+  }
+  if(senBool(0,0,0,0,1)){
+    controlSignal = 2 * Kp;
+  }
+  if(senBool(1,0,0,0,0)){
+    controlSignal = -2 * Kp;
+  }
+
+  speedDiferential = controlSignal * motorBaseSpeed;
+
+  if (!senBool(0,0,0,0,0)){
+    move("FWD",speedDiferential);
+    Serial.print("RGT:  ");
+    Serial.print(motorBaseSpeed + speedDiferential);
+    Serial.print("    LFT:  ");
+    Serial.println(motorBaseSpeed - speedDiferential);
+
+  }
+  else {
+    move("STP", 0);
+    Serial.println("No line detected");
   }
 }
