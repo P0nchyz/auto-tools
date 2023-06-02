@@ -6,13 +6,21 @@
 #define BIN2 23
 #define STBY 20
 
-bool sens1;
-bool sens2;
-bool sens3;
-bool sens4;
-bool sens5;
-bool sens6;
-bool sens7;
+#define senIn1 21
+#define senIn2 18
+#define senIn3 19
+#define senIn4 2
+#define senIn5 3
+#define senInA 10
+#define senInB 15
+
+bool sen1;
+bool sen2;
+bool sen3;
+bool sen4;
+bool sen5;
+bool senA;
+bool senB;
 
 const int motorBaseSpeed = 128;
 const float Kp = 0.3;
@@ -29,31 +37,18 @@ void setup() {
   pinMode(BIN2, OUTPUT);
   pinMode(STBY, OUTPUT);
 
-  pinMode(21, INPUT_PULLUP);
-  pinMode(18, INPUT_PULLUP);
-  pinMode(19, INPUT_PULLUP);
-  pinMode(2, INPUT_PULLUP);
-  pinMode(3, INPUT_PULLUP);
-  pinMode(10, INPUT_PULLUP);
-  pinMode(15, INPUT_PULLUP);
+  pinMode(senIn1, INPUT_PULLUP);
+  pinMode(senIn2, INPUT_PULLUP);
+  pinMode(senIn3, INPUT_PULLUP);
+  pinMode(senIn4, INPUT_PULLUP);
+  pinMode(senIn5, INPUT_PULLUP);
+  pinMode(senInA, INPUT_PULLUP);
+  pinMode(senInB, INPUT_PULLUP);
 }
 
 void loop() {
-  sensAsigner();
-  //sensorPrinter();
-  if (sens4){
-    controlSignal = 0 * Kp;
-  }
-  if (sens3){
-    controlSignal = -1 * Kp;
-  }
-  if (sens5){
-    controlSignal = 1 * Kp;
-  }
-  speedDiferential = controlSignal * motorBaseSpeed;
-  if(sens4 || sens3 || sens5){
-    move("FWD", speedDiferential);
-  }
+  senAsigner();
+  sensorPrinter();
 }
 
 void move(String direction,int motorPower){
@@ -124,36 +119,43 @@ void move(String direction,int motorPower){
     analogWrite(PWMB, 0);
   }
   else {
-    Serial.println("ERROR");
+    Serial.println("ERROR: Invalid input for move()");
   }
 }
 
-void sensAsigner(){
-  sens1 = !digitalRead(21);
-  sens2 = !digitalRead(18);
-  sens3 = !digitalRead(19);
-  sens4 = !digitalRead(2);
-  sens5 = !digitalRead(3);
-  sens6 = !digitalRead(10);
-  sens7 = !digitalRead(15);
+void senAsigner(){
+  sen1 = !digitalRead(senIn1);
+  sen2 = !digitalRead(senIn2);
+  sen3 = !digitalRead(senIn3);
+  sen4 = !digitalRead(senIn4);
+  sen5 = !digitalRead(senIn5);
+  senA = !digitalRead(senInA);
+  senB = !digitalRead(senInB);
 }
 
 void sensorPrinter()
 {
-  Serial.print("#");
-  Serial.print("#");
-  Serial.print(sens1);
-  Serial.print("#");
-  Serial.println("#");
-  Serial.print(sens2);
-  Serial.print(sens3);
-  Serial.print(sens4);
-  Serial.print(sens5);
-  Serial.println(sens6);
-  Serial.print("#");
-  Serial.print("#");
-  Serial.print(sens7);
-  Serial.print("#");
-  Serial.println("#");
   Serial.println();
+  Serial.print("##");
+  Serial.print(senA);
+  Serial.println("##");
+  Serial.print(sen1);
+  Serial.print(sen2);
+  Serial.print(sen3);
+  Serial.print(sen4);
+  Serial.println(sen5);
+  Serial.print("##");
+  Serial.print(senB);
+  Serial.println("##");
+  Serial.println();
+  delay(100);
+}
+
+bool senBool(bool s1,bool s2,bool s3,bool s4,bool s5){
+  if(s1==sen1 && s2==sen2 && s3==sen3 && s4==sen4 && s5==sen5){
+    return true;
+  }
+  else{
+    return false;
+  }
 }
