@@ -183,6 +183,8 @@ bool senBool(bool s1,bool s2,bool s3,bool s4,bool s5){
 bool topTFlag;
 bool leftTFlag;
 bool rightTFlag;
+
+const int FORWARD_DELAY = 7000;
 void senMover() {
   if ((senBool(1,1,1,1,1) && !senA && senB) || topTFlag){
     if (!topTFlag){
@@ -192,7 +194,7 @@ void senMover() {
     digitalWrite(LED_BUILTIN, HIGH);
     Serial.println("Top T");
     if ((senBool(1,1,1,0,0) && senA && senB) || (senBool(0,0,1,1,1) && senA && senB)){
-      for (int i = 0; i < 3000; i++){
+      for (int i = 0; i < FORWARD_DELAY; i++){
         senLineFollow();
         Serial.println("delayed fwd");
         Serial.println(i);
@@ -210,7 +212,7 @@ void senMover() {
     digitalWrite(LED_BUILTIN, HIGH);
     Serial.println("Left T");
     if ((senBool(1,1,1,1,1) && senA && !senB) || (senBool(1,1,1,0,0) && senA && senB)){
-      for (int i = 0; i < 3000; i++){
+      for (int i = 0; i < FORWARD_DELAY; i++){
         senLineFollow();
         Serial.println("delayed fwd");
         Serial.println(i);
@@ -228,7 +230,7 @@ void senMover() {
     digitalWrite(LED_BUILTIN, HIGH);
     Serial.println("Right T");
     if ((senBool(1,1,1,1,1) && senA && !senB) || (senBool(0,0,1,0,0) && senA && senB)){
-      for (int i = 0; i < 3000; i++){
+      for (int i = 0; i < FORWARD_DELAY; i++){
         senLineFollow();
         Serial.println("delayed fwd");
         Serial.println(i);
