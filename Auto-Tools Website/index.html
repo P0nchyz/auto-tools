@@ -20,7 +20,45 @@
         }
         header {
             display: flex;
-            justify-content: center;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px;
+        }
+        header h1 {
+            margin-right: auto;
+            margin-left: auto;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .battery-container {
+            position: relative;
+            display: flex;
+            width: 30px;
+            height: 15px;
+            background-color: transparent;
+            border: 2px solid green;
+            border-radius: 5px;
+            align-items: center;
+            padding: 5px;
+        }
+
+
+        .battery-level {
+            height: 100%;
+            width: 30%;
+            border-radius: 5px;
+            background-color: green;
+        }
+        .battery-text {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: Arial, Helvetica, sans-serif;
+            color: white;
+            font-size: 10px;
+
+
         }
         main {
             display: flex;
@@ -99,6 +137,13 @@
 <body>
     <header>
         <h1>Auto Tool</h1>
+        <div>
+            <div id="battery-container" class="battery-container">
+                <div id="battery-level" class="battery-level"></div>
+                <div id="battery-text" class="battery-text"></div>
+                <div class="battery-unavailable"></div>
+            </div>
+        </div>
     </header>
     <main>
         <div class="select-t">
@@ -138,6 +183,43 @@
                 document.getElementById("current-tools").innerHTML = "";
             }
         }
+
+        var batteryLevel = 0;
+        var batteryLevelElement = document.getElementById('battery-level');
+        var batteryTextElement = document.getElementById('battery-text');
+        setInterval(main, 1);
+        function main(){
+            if(dataJSON.batteryVoltage < 9){
+                batteryLevelElement.style.display = "none";
+                document.getElementById("battery-container").style.borderColor = "red";
+                batteryTextElement.textContent = "X";
+                batteryTextElement.style.color = "red";
+            }
+            else if (dataJSON.batteryVoltage >= 9 && dataJSON.batteryVoltage <= 11.1){
+                document.getElementById("battery-level").style.display = "block";
+                document.getElementById("battery-container").style.borderColor = "green";
+                batteryTextElement.textContent = Math.round(((dataJSON.batteryVoltage - 9) * 47.61)) + "%";
+                batteryTextElement.style.color = "white";
+                batteryLevelElement.style.width = Math.round(((dataJSON.batteryVoltage - 9) * 47.61)) + '%';
+            }
+            else if (dataJSON.batteryVoltage > 11.1){
+                batteryAnimation();
+            }
+        }
+        function batteryAnimation(){
+            if(batteryLevel < 100){
+                document.getElementById("battery-level").style.display = "block";
+                document.getElementById("battery-container").style.borderColor = "green";
+                batteryLevel += 1;
+                batteryLevelElement.style.width = batteryLevel + '%';
+                batteryTextElement.textContent = "";
+            }
+            else {
+            batteryLevel = 0;
+            }
+        }
+
+        
         var Socket;
         function init() {
             Socket = new WebSocket("ws://" + window.location.hostname + ":81/");
@@ -179,7 +261,14 @@
                     id : document.getElementById("ul-tools").getElementsByTagName("li")[i].getAttribute("id").slice(2)
                 };
             }
-            console.log(sendJSON);
+
+            if(sendJSON.stationID.path >= 0 && sendJSON.stationID.path.length <= 8){
+                console.log(sendJSON);
+                Socket.send(JSON.stringify(sendJSON));
+            }
+            else {
+                alert("Invalid path");
+            }
         }
         window.onload = function(event) {
             init();

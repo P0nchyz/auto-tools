@@ -3,7 +3,7 @@ char CURRENT_PATH[9]; //Array made to store each of the digits of the driection 
 const unsigned int MAX_MESSAGE_LENGHT = 12; //max lenght allowed on the serial buffer array
 int CURRENT_PATH_POSITION = 0;
 
-#define PWMA 27
+#define PWMA 29
 #define PWMB 28
 #define AIN1 27
 #define AIN2 26
@@ -72,7 +72,7 @@ void loop() {
   senMover();
 }
 
-void move(String direction,int motorPower){
+void move(String direction,float motorPower){
   if(direction == "FWD"){
     //Serial.println("Moving forward...");
     digitalWrite(STBY, HIGH);

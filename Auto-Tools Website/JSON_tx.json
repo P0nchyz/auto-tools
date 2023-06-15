@@ -24,5 +24,6 @@
             "available":false,
             "usedBy":"José"
         }
-    ]
+    ],
+    "batteryVoltage" : 0
 }
