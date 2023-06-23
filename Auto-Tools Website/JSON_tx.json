@@ -2,27 +2,21 @@
     "tools" : [
         {
             "id":"00000001",
-            "name":"Screwdriver",
+            "name":"Wrench",
             "available":false,
             "usedBy":"Mario"
         },
         {
             "id":"00000002",
-            "name":"Hammer",
+            "name":"Pliers",
             "available":true,
             "usedBy":null
         },
         {
             "id":"00000003",
-            "name":"Screwdriver",
+            "name":"Screw Box",
             "available":true,
             "usedBy":null
-        },
-        {
-            "id":"00000004",
-            "name":"Nails",
-            "available":false,
-            "usedBy":"José"
         }
     ],
     "batteryVoltage" : 0
