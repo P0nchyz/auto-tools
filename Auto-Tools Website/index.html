@@ -222,9 +222,9 @@
             else if (dataJSON.batteryVoltage >= 9 && dataJSON.batteryVoltage <= 11.1){
                 document.getElementById("battery-level").style.display = "block";
                 document.getElementById("battery-container").style.borderColor = "#BBD6B8";
-                batteryTextElement.textContent = Math.round(((dataJSON.batteryVoltage - 9) * 47.61)) + "%";
+                batteryTextElement.textContent = Math.round(Math.round(((dataJSON.batteryVoltage - 9) * 47.61)) / 5) * 5 + "%";
                 batteryTextElement.style.color = "white";
-                batteryLevelElement.style.width = Math.round(((dataJSON.batteryVoltage - 9) * 47.61)) + '%';
+                batteryLevelElement.style.width = Math.round(Math.round(((dataJSON.batteryVoltage - 9) * 47.61)) / 5) * 5 + '%';
             }
             else if (dataJSON.batteryVoltage > 11.1){
                 batteryAnimation();
@@ -286,7 +286,7 @@
                 };
             }
 
-            if(sendJSON.stationID.path >= 0 && sendJSON.stationID.path.length <= 8){
+            if(sendJSON.stationID.path >= 0 && sendJSON.stationID.path.length <= 8 && /^[012]+$/.test(sendJSON.stationID.path)){
                 console.log(sendJSON);
                 Socket.send(JSON.stringify(sendJSON));
             }

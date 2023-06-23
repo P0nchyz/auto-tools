@@ -167,7 +167,7 @@ bool topTFlag;
 bool leftTFlag;
 bool rightTFlag;
 
-const int FORWARD_DELAY = 7000;
+const int FORWARD_DELAY = 5000;
 void senMover() {
   if ((senBool(1, 1, 1, 1, 1) && !senA && senB) || topTFlag) {
     if (!topTFlag) {
@@ -262,6 +262,7 @@ void senLineFollow() {
 void senIntersectionTurner(String turningDirection) {
   if (CURRENT_PATH[CURRENT_PATH_POSITION] == '0') {
     Serial.println("No More Directions");
+    move("STP", 0);
   } else if (CURRENT_PATH[CURRENT_PATH_POSITION] == '1' && (turningDirection == "topT" || turningDirection == "leftT")) {
     move("LFT", 0);
     Serial.println("current pos == 1; moving right");
